@@ -49,7 +49,7 @@ export type CreateUserRequest = {
 }
 
 export const usersApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
   reducerPath: "usersApi",
   tagTypes: ["Users"],
   endpoints: (builder) => ({

@@ -35,7 +35,16 @@ export default function OrganizationDetailsPage() {
     try {
       await updateOrganization({
         id: id!,
-        body: formData,
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          region: formData.region,
+          country: formData.country,
+          postalCode: formData.postal_code,
+        },
       }).unwrap()
       navigate("/organizations")
     } catch (err) {

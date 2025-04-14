@@ -65,7 +65,7 @@ export type CreateContactRequest = {
 }
 
 export const contactsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
   reducerPath: "contactsApi",
   tagTypes: ["Contacts"],
   endpoints: (builder) => ({

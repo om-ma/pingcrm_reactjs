@@ -33,7 +33,7 @@ export type CreateAccountRequest = {
 }
 
 export const accountsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
   reducerPath: "accountsApi",
   tagTypes: ["Accounts"],
   endpoints: (builder) => ({
@@ -60,17 +60,18 @@ export const accountsApiSlice = createApi({
       }),
       invalidatesTags: ["Accounts"],
     }),
-    updateAccount: builder.mutation<SingleAccountResponse, { id: string; account: Partial<CreateAccountRequest> }>({
-      query: ({ id, account }) => ({
+    updateAccount: builder.mutation<
+      SingleAccountResponse,
+      { id: string; body: Partial<CreateAccountRequest> }
+    >({
+      query: ({ id, body }) => ({
         url: `/accounts/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: {
           data: {
             type: "accounts",
             id,
-            attributes: {
-              name: account.name,
-            },
+            attributes: body,
           },
         },
       }),

@@ -26,7 +26,7 @@ export default function AccountDetailsPage() {
     try {
       await updateAccount({
         id: id!,
-        body: { name },
+        body: { name: name },
       }).unwrap()
       navigate("/accounts")
     } catch (err) {

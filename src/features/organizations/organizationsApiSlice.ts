@@ -56,7 +56,7 @@ export type CreateOrganizationRequest = {
 }
 
 export const organizationsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
   reducerPath: "organizationsApi",
   tagTypes: ["Organizations"],
   endpoints: (builder) => ({
@@ -90,24 +90,18 @@ export const organizationsApiSlice = createApi({
       }),
       invalidatesTags: ["Organizations"],
     }),
-    updateOrganization: builder.mutation<SingleOrganizationResponse, { id: string; organization: Partial<CreateOrganizationRequest> }>({
-      query: ({ id, organization }) => ({
+    updateOrganization: builder.mutation<
+      SingleOrganizationResponse,
+      { id: string; body: Partial<CreateOrganizationRequest> }
+    >({
+      query: ({ id, body }) => ({
         url: `/organizations/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: {
           data: {
             type: "organizations",
             id,
-            attributes: {
-              name: organization.name,
-              email: organization.email,
-              phone: organization.phone,
-              address: organization.address,
-              city: organization.city,
-              region: organization.region,
-              country: organization.country,
-              postal_code: organization.postalCode,
-            },
+            attributes: body,
           },
         },
       }),

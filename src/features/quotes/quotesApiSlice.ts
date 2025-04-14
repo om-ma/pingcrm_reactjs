@@ -16,7 +16,7 @@ type QuotesApiResponse = {
 
 // Define a service using a base URL and expected endpoints
 export const quotesApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/quotes" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
   reducerPath: "quotesApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Quotes"],
