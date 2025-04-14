@@ -6,6 +6,7 @@ import packageJson from "./package.json" with { type: "json" }
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "/",
 
   server: {
     open: true,
@@ -13,6 +14,15 @@ export default defineConfig({
       "/api": {
         target: "https://pingcrm-fastapi.onrender.com",
         changeOrigin: true,
+      },
+    },
+  },
+
+  build: {
+    outDir: "dist",
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
       },
     },
   },
