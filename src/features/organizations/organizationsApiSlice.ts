@@ -52,8 +52,7 @@ export type CreateOrganizationRequest = {
   city: string
   region: string
   country: string
-  postal_code: string
-  account_id: number
+  postalCode: string
 }
 
 export const organizationsApiSlice = createApi({
@@ -61,61 +60,65 @@ export const organizationsApiSlice = createApi({
   reducerPath: "organizationsApi",
   tagTypes: ["Organizations"],
   endpoints: (builder) => ({
-    getOrganizations: builder.query<
-      OrganizationsResponse,
-      { skip?: number; limit?: number }
-    >({
-      query: ({ skip = 0, limit = 10 }) =>
-        `/organizations?skip=${skip}&limit=${limit}`,
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.data.map(({ id }) => ({
-                type: "Organizations" as const,
-                id,
-              })),
-              { type: "Organizations", id: "LIST" },
-            ]
-          : [{ type: "Organizations", id: "LIST" }],
+    getOrganizations: builder.query<OrganizationsResponse, { limit?: number }>({
+      query: ({ limit = 10 } = {}) => `/organizations?limit=${limit}`,
+      providesTags: ["Organizations"],
     }),
     getOrganization: builder.query<SingleOrganizationResponse, string>({
       query: (id) => `/organizations/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "Organizations", id }],
+      providesTags: ["Organizations"],
     }),
-    createOrganization: builder.mutation<
-      SingleOrganizationResponse,
-      CreateOrganizationRequest
-    >({
-      query: (body) => ({
+    createOrganization: builder.mutation<SingleOrganizationResponse, CreateOrganizationRequest>({
+      query: (organization) => ({
         url: "/organizations",
         method: "POST",
-        body,
+        body: {
+          data: {
+            type: "organizations",
+            attributes: {
+              name: organization.name,
+              email: organization.email,
+              phone: organization.phone,
+              address: organization.address,
+              city: organization.city,
+              region: organization.region,
+              country: organization.country,
+              postal_code: organization.postalCode,
+            },
+          },
+        },
       }),
-      invalidatesTags: [{ type: "Organizations", id: "LIST" }],
+      invalidatesTags: ["Organizations"],
     }),
-    updateOrganization: builder.mutation<
-      SingleOrganizationResponse,
-      { id: string; body: Partial<CreateOrganizationRequest> }
-    >({
-      query: ({ id, body }) => ({
+    updateOrganization: builder.mutation<SingleOrganizationResponse, { id: string; organization: Partial<CreateOrganizationRequest> }>({
+      query: ({ id, organization }) => ({
         url: `/organizations/${id}`,
-        method: "PUT",
-        body,
+        method: "PATCH",
+        body: {
+          data: {
+            type: "organizations",
+            id,
+            attributes: {
+              name: organization.name,
+              email: organization.email,
+              phone: organization.phone,
+              address: organization.address,
+              city: organization.city,
+              region: organization.region,
+              country: organization.country,
+              postal_code: organization.postalCode,
+            },
+          },
+        },
       }),
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: "Organizations", id },
-        { type: "Organizations", id: "LIST" },
-      ],
+      invalidatesTags: ["Organizations"],
     }),
     deleteOrganization: builder.mutation<SingleOrganizationResponse, string>({
       query: (id) => ({
         url: `/organizations/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _error, id) => [
-        { type: "Organizations", id },
-        { type: "Organizations", id: "LIST" },
-      ],
+      invalidatesTags: ["Organizations"],
     }),
   }),
 })

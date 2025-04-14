@@ -29,12 +29,7 @@ export type SingleAccountResponse = {
 }
 
 export type CreateAccountRequest = {
-  data: {
-    type: string
-    attributes: {
-      name: string
-    }
-  }
+  name: string
 }
 
 export const accountsApiSlice = createApi({
@@ -42,66 +37,51 @@ export const accountsApiSlice = createApi({
   reducerPath: "accountsApi",
   tagTypes: ["Accounts"],
   endpoints: (builder) => ({
-    getAccounts: builder.query<AccountsResponse, { skip?: number; limit?: number }>({
-      query: ({ skip = 0, limit = 10 }) => `/accounts?skip=${skip}&limit=${limit}`,
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.data.map(({ id }) => ({ type: "Accounts" as const, id })),
-              { type: "Accounts", id: "LIST" },
-            ]
-          : [{ type: "Accounts", id: "LIST" }],
+    getAccounts: builder.query<AccountsResponse, { limit?: number }>({
+      query: ({ limit = 10 } = {}) => `/accounts?limit=${limit}`,
+      providesTags: ["Accounts"],
     }),
     getAccount: builder.query<SingleAccountResponse, string>({
       query: (id) => `/accounts/${id}`,
-      providesTags: (_result, _error, id) => [{ type: "Accounts", id }],
+      providesTags: ["Accounts"],
     }),
-    createAccount: builder.mutation<SingleAccountResponse, { name: string }>({
-      query: ({ name }) => ({
+    createAccount: builder.mutation<SingleAccountResponse, CreateAccountRequest>({
+      query: (account) => ({
         url: "/accounts",
         method: "POST",
         body: {
           data: {
             type: "accounts",
             attributes: {
-              name,
+              name: account.name,
             },
           },
         },
       }),
-      invalidatesTags: [{ type: "Accounts", id: "LIST" }],
+      invalidatesTags: ["Accounts"],
     }),
-    updateAccount: builder.mutation<
-      SingleAccountResponse,
-      { id: string; body: { name: string } }
-    >({
-      query: ({ id, body }) => ({
+    updateAccount: builder.mutation<SingleAccountResponse, { id: string; account: Partial<CreateAccountRequest> }>({
+      query: ({ id, account }) => ({
         url: `/accounts/${id}`,
-        method: "PUT",
+        method: "PATCH",
         body: {
           data: {
             type: "accounts",
             id,
             attributes: {
-              name: body.name,
+              name: account.name,
             },
           },
         },
       }),
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: "Accounts", id },
-        { type: "Accounts", id: "LIST" },
-      ],
+      invalidatesTags: ["Accounts"],
     }),
     deleteAccount: builder.mutation<SingleAccountResponse, string>({
       query: (id) => ({
         url: `/accounts/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _error, id) => [
-        { type: "Accounts", id },
-        { type: "Accounts", id: "LIST" },
-      ],
+      invalidatesTags: ["Accounts"],
     }),
   }),
 })

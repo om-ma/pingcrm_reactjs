@@ -9,8 +9,10 @@ import UserDetailsPage from "../pages/users/[id]"
 import CreateUserPage from "../pages/users/create"
 import OrganizationsPage from "../pages/organizations"
 import OrganizationDetailsPage from "../pages/organizations/[id]"
+import CreateOrganizationPage from "../pages/organizations/create"
 import ContactsPage from "../pages/contacts"
 import ContactDetailsPage from "../pages/contacts/[id]"
+import CreateContactPage from "../pages/contacts/create"
 import ErrorPage from "../pages/error"
 
 export const router = createBrowserRouter([
@@ -40,6 +42,7 @@ export const router = createBrowserRouter([
         path: "organizations",
         children: [
           { index: true, element: <OrganizationsPage /> },
+          { path: "create", element: <CreateOrganizationPage /> },
           { path: ":id", element: <OrganizationDetailsPage /> },
         ],
       },
@@ -47,6 +50,7 @@ export const router = createBrowserRouter([
         path: "contacts",
         children: [
           { index: true, element: <ContactsPage /> },
+          { path: "create", element: <CreateContactPage /> },
           { path: ":id", element: <ContactDetailsPage /> },
         ],
       },

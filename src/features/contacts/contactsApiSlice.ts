@@ -52,17 +52,16 @@ export type SingleContactResponse = {
 }
 
 export type CreateContactRequest = {
-  first_name: string
-  last_name: string
+  firstName: string
+  lastName: string
   email: string
   phone: string
   address: string
   city: string
   region: string
   country: string
-  postal_code: string
-  account_id: number
-  organization_id?: number
+  postalCode: string
+  organizationId?: number
 }
 
 export const contactsApiSlice = createApi({
@@ -88,7 +87,23 @@ export const contactsApiSlice = createApi({
       query: (body) => ({
         url: "/contacts",
         method: "POST",
-        body,
+        body: {
+          data: {
+            type: "contacts",
+            attributes: {
+              first_name: body.firstName,
+              last_name: body.lastName,
+              email: body.email,
+              phone: body.phone,
+              address: body.address,
+              city: body.city,
+              region: body.region,
+              country: body.country,
+              postal_code: body.postalCode,
+              organization_id: body.organizationId,
+            },
+          },
+        },
       }),
       invalidatesTags: [{ type: "Contacts", id: "LIST" }],
     }),
@@ -99,7 +114,24 @@ export const contactsApiSlice = createApi({
       query: ({ id, body }) => ({
         url: `/contacts/${id}`,
         method: "PUT",
-        body,
+        body: {
+          data: {
+            type: "contacts",
+            id,
+            attributes: {
+              ...(body.firstName && { first_name: body.firstName }),
+              ...(body.lastName && { last_name: body.lastName }),
+              ...(body.email && { email: body.email }),
+              ...(body.phone && { phone: body.phone }),
+              ...(body.address && { address: body.address }),
+              ...(body.city && { city: body.city }),
+              ...(body.region && { region: body.region }),
+              ...(body.country && { country: body.country }),
+              ...(body.postalCode && { postal_code: body.postalCode }),
+              ...(body.organizationId && { organization_id: body.organizationId }),
+            },
+          },
+        },
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: "Contacts", id },
