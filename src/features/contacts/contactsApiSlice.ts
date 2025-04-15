@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { API_BASE_URL } from "../../config/env"
 
 export type Contact = {
   id: string
@@ -65,7 +66,7 @@ export type CreateContactRequest = {
 }
 
 export const contactsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   reducerPath: "contactsApi",
   tagTypes: ["Contacts"],
   endpoints: (builder) => ({

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { API_BASE_URL } from "../../config/env"
 
 export type User = {
   id: string
@@ -49,7 +50,7 @@ export type CreateUserRequest = {
 }
 
 export const usersApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   reducerPath: "usersApi",
   tagTypes: ["Users"],
   endpoints: (builder) => ({

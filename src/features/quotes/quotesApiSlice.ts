@@ -1,5 +1,6 @@
 // Need to use the React-specific entry point to import `createApi`
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { API_BASE_URL } from "../../config/env"
 
 type Quote = {
   id: number
@@ -16,7 +17,7 @@ type QuotesApiResponse = {
 
 // Define a service using a base URL and expected endpoints
 export const quotesApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   reducerPath: "quotesApi",
   // Tag types are used for caching and invalidation.
   tagTypes: ["Quotes"],

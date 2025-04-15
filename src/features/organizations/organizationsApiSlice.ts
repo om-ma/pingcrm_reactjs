@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { API_BASE_URL } from "../../config/env"
 
 export type Organization = {
   id: string
@@ -56,7 +57,7 @@ export type CreateOrganizationRequest = {
 }
 
 export const organizationsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pingcrm-fastapi.onrender.com/api/v1" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
   reducerPath: "organizationsApi",
   tagTypes: ["Organizations"],
   endpoints: (builder) => ({
